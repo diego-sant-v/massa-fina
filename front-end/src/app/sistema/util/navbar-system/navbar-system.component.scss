@@ -1,0 +1,24 @@
+
+*{
+    border: 1px solid red;
+}
+.header{
+    display: flex;
+    align-items: center;
+    position: fixed;
+    z-index: 9;
+}
+
+.header a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.header .logo{
+    max-height: 32px;
+}
+
+.header .title-group i{
+    padding-right: 5px;
+}

@@ -1,0 +1,44 @@
+
+.mr-12{
+    margin-right: 12px;
+}
+
+.ml-12{
+    margin-left: 12px;
+}
+
+.w-23{
+    width: 23%;
+}
+
+
+.vertical-line {
+    border-left: 2px solid black; /* Altere a cor e a largura conforme necessário */
+    /*height: 100px;  Altere a altura conforme necessário */
+}
+
+.card-login-container{
+    display: flex;
+    background: rgba(255, 255, 255, 0.43);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6.3px);
+    -webkit-backdrop-filter: blur(6.3px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    height: 250px;
+    width: 100%;
+}
+
+.login-logo-img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.login-body{
+    margin: auto;
+}
+
+.btn-login{
+    margin-left: 42%;
+}

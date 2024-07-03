@@ -1,0 +1,26 @@
+<app-navbar-system></app-navbar-system>
+<app-sidenav></app-sidenav>
+
+<div class="container-fluid">
+    <div class="row justify-content-md-center mt-6">
+            <div class="col-md-10 div_pizzas">
+                <div class="col-md-4" *ngFor="let pizza of pizzasObj">
+                    <p-card [header]="pizza.pizzaName" [subheader]="pizza.typePizza.toString()" class="p-card-props" styleClass="p-card-shadow">
+                        <ng-template pTemplate="header">
+                            <img alt="Card" [src]="'/assets/images/pizzas-images/' + pizza.file.relativePath.split('\\').pop()">
+                            <!-- divido a string original em partes menores a cada /, pego o ultimo que seria só o nome do arquivo e 
+                            concateno com o caminho que quero -->
+                        </ng-template>
+                        <p>{{pizza.ingredients}}</p>
+                        <span>Preço:</span>
+                        <span>{{pizza.price}}</span>
+                        <ng-template pTemplate="footer">
+                            <p-button label="Adicionar ao Carinho" [raised]="true" severity="success">
+                                <mat-icon>add_shopping_cart</mat-icon>
+                            </p-button>
+                        </ng-template>
+                    </p-card>
+                </div>
+            </div>
+    </div>
+</div>
