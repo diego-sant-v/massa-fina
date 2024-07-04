@@ -2,11 +2,9 @@
 
 CREATE TABLE IF NOT EXISTS users (
                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                     login TEXT NOT NULL UNIQUE,
-                                     email VARCHAR(255) NOT NULL,
-                                     password TEXT NOT NULL,
-                                     role TEXT NOT NULL,
-                                     enabled BOOLEAN NOT NULL,
+                                     user_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     date_of_birth DATE NOT NULL,
     gender VARCHAR(255) NOT NULL,
     street VARCHAR(255) NOT NULL,
@@ -18,8 +16,12 @@ CREATE TABLE IF NOT EXISTS users (
     uf VARCHAR(2) NOT NULL,
     dd INT NOT NULL,
     is_admin BOOLEAN NOT NULL,
-    is_confirmed BOOLEAN NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
+    is_confirmed bit(1) DEFAULT NULL,
+    account_non_expired bit(1) DEFAULT NULL,
+    account_non_locked bit(1) DEFAULT NULL,
+    credentials_non_expired bit(1) DEFAULT NULL,
+    enabled bit(1) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    );

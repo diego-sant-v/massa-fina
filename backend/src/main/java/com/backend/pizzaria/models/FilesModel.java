@@ -1,12 +1,8 @@
 package com.backend.pizzaria.models;
 
-import com.backend.pizzaria.enums.TypeImageUpload;
-import com.backend.pizzaria.user.UsersModel;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
-@Component
+
 @Entity
 @Table(name = "files")
 public class FilesModel {
@@ -15,7 +11,7 @@ public class FilesModel {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne(cascade = CascadeType.MERGE) // Many files can be associated with one user
+    @ManyToOne // Many files can be associated with one user
     @JoinColumn(name = "user_id") // name of the foreign key column in the files table
     private UsersModel user;
 
@@ -29,11 +25,7 @@ public class FilesModel {
     private Boolean isImage;
 
     @Column(name = "file_size")
-    private Long fileSize;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type_image_upload")
-    private TypeImageUpload typeImageUpload;
+    private Number fileSize;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -77,20 +69,12 @@ public class FilesModel {
         isImage = image;
     }
 
-    public Long getFileSize() {
+    public Number getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Long fileSize) {
+    public void setFileSize(Number fileSize) {
         this.fileSize = fileSize;
-    }
-
-    public TypeImageUpload getTypeImageUpload() {
-        return typeImageUpload;
-    }
-
-    public void setTypeImageUpload(TypeImageUpload typeImageUpload) {
-        this.typeImageUpload = typeImageUpload;
     }
 
     public Date getCreatedAt() {

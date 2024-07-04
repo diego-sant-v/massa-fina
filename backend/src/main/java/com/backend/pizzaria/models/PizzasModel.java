@@ -1,12 +1,10 @@
 package com.backend.pizzaria.models;
 
-import com.backend.pizzaria.dto.UserLoggedDTO;
 import com.backend.pizzaria.enums.EdgesTypes;
 import com.backend.pizzaria.enums.PizzaTypes;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Entity
 @Table(name = "pizzas")
@@ -33,13 +31,6 @@ public class PizzasModel {
 
     @Column(name = "ingredients")
     private String ingredients;
-
-    @ManyToOne(cascade = CascadeType.MERGE) // Muitos arquivos podem estar associados a uma pizza
-    @JoinColumn(name = "file_id")// nome da coluna de chave estrangeira na tabela de arquivos
-    private FilesModel file;
-
-    @Transient
-    private Long fileId;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -91,19 +82,4 @@ public class PizzasModel {
         this.ingredients = ingredients;
     }
 
-    public FilesModel getFile() {
-        return file;
-    }
-
-    public void setFile(FilesModel file) {
-        this.file = file;
-    }
-
-    public Long getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(Long fileId) {
-        this.fileId = fileId;
-    }
 }

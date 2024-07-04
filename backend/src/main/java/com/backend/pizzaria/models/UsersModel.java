@@ -1,29 +1,28 @@
-package com.backend.pizzaria.user;
+package com.backend.pizzaria.models;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.*;
+import java.security.Permission;
+import java.security.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Entity
-@Component
 @Table(name = "users")
-public class UsersModel implements UserDetails  {
+public class UsersModel implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "login", nullable = false, unique = true)
-    private String login;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private UserRole role;
+    @Column(name = "user_name", nullable = false, unique = true)
+    private String userName;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -70,11 +69,18 @@ public class UsersModel implements UserDetails  {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+
+    @Column(name = "account_non_expired", nullable = false)
+    private Boolean accountNonExpired;
+
+    @Column(name = "account_non_locked", nullable = false)
+    private Boolean accountNonLocked;
+
+    @Column(name = "credentials_non_expired", nullable = false)
+    private Boolean credentialsNonExpired;
+
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
-
-    @Column(name = "img_relative_path")
-    private String imgRelativePath;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -82,18 +88,64 @@ public class UsersModel implements UserDetails  {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public UsersModel() {}
+    @ManyToMany(fetch = FetchType.EAGER)
+    //carreguei users eu carrego tmb as permissões
+    //fetch = FetchType.LAZY seria outro tipo
+    @JoinTable(name = "user_permission", joinColumns = {@JoinColumn (name = "id_user")},
+        inverseJoinColumns = {@JoinColumn (name = "id_permission")})
+    private List<PermissionModel> permissions;
+
+    public UsersModel(){}
+
+    public List<String> getRoles(){
+        List<String> roles = new ArrayList<>();
+        for (PermissionModel permission: permissions){
+            roles.add(permission.getDescription());
+        }
+        return roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.permissions;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 
     public long getId() {
         return id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -102,47 +154,6 @@ public class UsersModel implements UserDetails  {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public UsersModel(String login, String password, UserRole role){
-        this.login = login;
-        this.password = password;
-        this.role = role;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return login;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     public void setPassword(String password) {
@@ -253,28 +264,37 @@ public class UsersModel implements UserDetails  {
         this.phoneNumber = phoneNumber;
     }
 
+
+    public Boolean getAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public Boolean getCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
     public Boolean getEnabled() {
         return enabled;
     }
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public String getImgRelativePath() {
-        return imgRelativePath;
-    }
-
-    public void setImgRelativePath(String imgRelativePath) {
-        this.imgRelativePath = imgRelativePath;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
     }
 
     public Date getCreatedAt() {
@@ -285,39 +305,11 @@ public class UsersModel implements UserDetails  {
         return updatedAt;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UsersModel that)) return false;
-        return getId() == that.getId() && Objects.equals(getLogin(), that.getLogin()) && role == that.role && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPassword(), that.getPassword()) && Objects.equals(getDateOfBirth(), that.getDateOfBirth()) && Objects.equals(getGender(), that.getGender()) && Objects.equals(getStreet(), that.getStreet()) && Objects.equals(getStreetNumber(), that.getStreetNumber()) && Objects.equals(getCep(), that.getCep()) && Objects.equals(getNeighborhood(), that.getNeighborhood()) && Objects.equals(getComplement(), that.getComplement()) && Objects.equals(getLocality(), that.getLocality()) && Objects.equals(getUf(), that.getUf()) && Objects.equals(getDd(), that.getDd()) && Objects.equals(isAdmin, that.isAdmin) && Objects.equals(isConfirmedUser, that.isConfirmedUser) && Objects.equals(getPhoneNumber(), that.getPhoneNumber()) && Objects.equals(isEnabled(), that.isEnabled()) && Objects.equals(getCreatedAt(), that.getCreatedAt()) && Objects.equals(getUpdatedAt(), that.getUpdatedAt());
+    public List<PermissionModel> getPermissions() {
+        return permissions;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getLogin(), role, getEmail(), getPassword(), getDateOfBirth(), getGender(), getStreet(), getStreetNumber(), getCep(), getNeighborhood(), getComplement(), getLocality(), getUf(), getDd(), isAdmin, isConfirmedUser, getPhoneNumber(), isEnabled(), getCreatedAt(), getUpdatedAt());
-    }
-
-    public UsersModel(long id, String login, UserRole role, String email, String password, Date dateOfBirth, String gender, String street, Integer streetNumber, String cep, String neighborhood, String complement, String locality, String uf, Integer dd, Boolean isAdmin, Boolean isConfirmedUser, String phoneNumber, Boolean enabled, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.login = login;
-        this.role = role;
-        this.email = email;
-        this.password = password;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.street = street;
-        this.streetNumber = streetNumber;
-        this.cep = cep;
-        this.neighborhood = neighborhood;
-        this.complement = complement;
-        this.locality = locality;
-        this.uf = uf;
-        this.dd = dd;
-        this.isAdmin = isAdmin;
-        this.isConfirmedUser = isConfirmedUser;
-        this.phoneNumber = phoneNumber;
-        this.enabled = enabled;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public void setPermissions(List<PermissionModel> permissions) {
+        this.permissions = permissions;
     }
 }
