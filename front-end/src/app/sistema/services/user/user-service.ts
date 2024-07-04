@@ -9,7 +9,7 @@ import { SnackBarService } from 'src/app/components/snack-bar/snack-bar.service'
   providedIn: 'root'
 })
 export class UserService {
-  apiUrl = 'http://localhost:8080/api/auth';
+  apiUrl = 'http://localhost:8080/auth';
   private isLogged = false;
   private tokenUser = "";
   constructor(private http: HttpClient, private snackBar: SnackBarService) { }
@@ -19,9 +19,12 @@ export class UserService {
   }
 
   loginUser(login: string, password: string): Observable<UserRegisterDTO> {
-    const apiUrlLogin = `${this.apiUrl}/login`;
-    const body = { login, password }; // Objeto com os dados de login
-    return this.http.post<any>(apiUrlLogin, body);
+    const apiUrlLogin = `${this.apiUrl}/signin`;
+    const params = new HttpParams()
+      .set('email', login)  // Aqui, 'email' corresponde ao parâmetro esperado pelo backend
+      .set('password', password);
+  
+    return this.http.get<any>(apiUrlLogin, { params });
   }
 
   setUserAccountLogged(user:UserRegisterDTO){
