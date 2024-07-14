@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserRegisterDTO } from '../../models/user-register-dto';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { SnackBarService } from 'src/app/components/snack-bar/snack-bar.service';
 
@@ -18,13 +18,18 @@ export class UserService {
     return this.http.post(apiUrlRegister, userRegister);
   }
 
-  loginUser(login: string, password: string): Observable<UserRegisterDTO> {
+  loginUser(email: string, password: string): Observable<UserRegisterDTO> {
     const apiUrlLogin = `${this.apiUrl}/signin`;
-    const params = new HttpParams()
-      .set('email', login)  // Aqui, 'email' corresponde ao parâmetro esperado pelo backend
-      .set('password', password);
-  
-    return this.http.get<any>(apiUrlLogin, { params });
+    const body = {
+      email: email,
+      password: password
+    };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<UserRegisterDTO>(apiUrlLogin, body, { headers });
   }
 
   setUserAccountLogged(user:UserRegisterDTO){
