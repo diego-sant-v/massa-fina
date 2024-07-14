@@ -6,20 +6,20 @@ public class AccountCredentialsVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String username;
+	private String email;
 	private String password;
 	
 	public AccountCredentialsVO(String username, String password) {
-		this.username = username;
+		this.email = username;
 		this.password = password;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String username) {
+		this.email = username;
 	}
 
 	public String getPassword() {
@@ -35,7 +35,7 @@ public class AccountCredentialsVO implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
 
@@ -53,10 +53,10 @@ public class AccountCredentialsVO implements Serializable{
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
-		if (username == null) {
-			if (other.username != null)
+		if (email == null) {
+			if (other.email != null)
 				return false;
-		} else if (!username.equals(other.username))
+		} else if (!email.equals(other.email))
 			return false;
 		return true;
 	}

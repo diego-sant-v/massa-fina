@@ -57,29 +57,6 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/signin")
-    public ResponseEntity<UserDTO> loginUsers(@RequestParam("email") String email, @RequestParam("password") String password) {
-        // Busca o usuário pelo email
-        UsersModel userFound = usersRepository.findByEmail(email);
-
-        // Verifica se o usuário foi encontrado
-        if (userFound == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // Verifica se a senha fornecida coincide com a senha armazenada (já criptografada)
-        if (!passwordEncoder.matches(password, userFound.getPassword())) {
-            return ResponseEntity.notFound().build(); // Senha incorreta
-        }
-
-        // Converte o modelo de usuário para DTO
-        UserDTO userDTO = toUserModelDTO(userFound);
-
-        // Retorna ResponseEntity com o DTO e status 200 OK
-        return ResponseEntity.ok(userDTO);
-    }
-
-
     private UserDTO toUserModelDTO(UsersModel usersModel) {
         return modelMapper.map(usersModel, UserDTO.class); // Convertendo a model para DTO
     }

@@ -47,7 +47,7 @@ public class AuthController {
 	}
 
 	private boolean checkIfParamsIsNotNull(AccountCredentialsVO data) {
-		return data == null || data.getUsername() == null || data.getUsername().isBlank()
+		return data == null || data.getEmail() == null || data.getEmail().isBlank()
 				|| data.getPassword() == null || data.getPassword().isBlank();
 	}
 }

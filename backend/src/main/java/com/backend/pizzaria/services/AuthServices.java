@@ -28,12 +28,14 @@ public class AuthServices {
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity signin(AccountCredentialsVO data) {
 		try {
-			var username = data.getUsername();
+			var username = data.getEmail();
 			var password = data.getPassword();
+
+			var user = repository.findByEmail(username);
+
 			authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(username, password));
-			
-			var user = repository.findByUsername(username);
+				new UsernamePasswordAuthenticationToken(user.getUsername(), password));
+
 			
 			var tokenResponse = new TokenVO();
 			if (user != null) {
@@ -49,7 +51,7 @@ public class AuthServices {
 	
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity refreshToken(String username, String refreshToken) {
-		var user = repository.findByUsername(username);
+		var user = repository.findByEmail(username);
 		
 		var tokenResponse = new TokenVO();
 		if (user != null) {
